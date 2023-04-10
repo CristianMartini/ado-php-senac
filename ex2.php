@@ -29,5 +29,57 @@ Dica:
 ?>
 <!DOCTYPE html>
 <html>
-    <!-- Coloque o que precisar aqui. -->
+<head>
+    <meta charset="UTF-8">
+    <title>Validaçao de Formulario</title>
+</head>
+<body>
+
+<?php
+$nome = trim($_POST['nome'] ?? '');
+$sexo = $_POST['sexo'] ?? '';
+$data_nascimento = $_POST['data-nascimento'] ?? '';
+
+if ($nome === '' || $sexo === '' || $data_nascimento === '') {
+    echo '<p>Errado</p>';
+} else {
+    if ($sexo !== 'M' && $sexo !== 'F') {
+        echo '<p>Errado</p>';
+    } else {
+        if (!dataValida($data_nascimento)) {
+            echo '<p>Errado</p>';
+        } else {
+            $hoje = new DateTimeImmutable();
+            if ($hoje < new DateTimeImmutable($data_nascimento) || anosDesde($data_nascimento) >= 120) {
+                echo '<p>Errado</p>';
+            } else {
+                $genero = $sexo === 'M' ? 'um garoto' : 'uma garota';
+                $idade = anosDesde($data_nascimento);
+                echo "<p>$nome é $genero de $idade anos de idade.</p>";
+            }
+        }
+    }
+}
+//funcões do  professor
+function anosDesde($de) {
+    global $hoje;
+    if (!dataValida($de)) return "Data inválida";
+    $data_de = new DateTimeImmutable($de);
+    $intervalo = $hoje->diff($data_de);
+    return $intervalo->y;
+}
+
+function dataValida($data) {
+    try {
+        $d = new DateTimeImmutable($data);
+        if ($data !== $d->format("Y-m-d")) return false;
+        if ((int) $d->format("Y") <= 0) return false;
+    } catch (Exception $x) {
+        return false;
+    }
+    return true;
+}
+?>
+
+</body>
 </html>

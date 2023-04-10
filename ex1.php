@@ -44,6 +44,64 @@ Dica:
 */
 ?>
 <!DOCTYPE html>
-<html>
-    <!-- Coloque o que precisar aqui. -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<?php
+
+if (empty($_GET['telefone'])) {
+	echo "<p>Número inválido</p>";
+} else {
+	$telefone = $_GET['telefone'];
+
+if (isset($_GET['telefone'])) {
+	$telefone = $_GET['telefone'];
+
+	if (preg_match('/^[0-9]{10,11}$/', $telefone)) {
+
+		$ddd = substr($telefone, 0, 2);
+		$numero = substr($telefone, 2);
+
+		$ddds_validos = array(
+			"11", "12", "13", "14", "15", "16", "17", "18", "19",
+			"21", "22", "24", "27", "28",
+			"31", "32", "33", "34", "35", "37", "38",
+			"41", "42", "43", "44", "45", "46", "47", "48", "49",
+			"51", "53", "54", "55",
+			"61", "62", "63", "64", "65", "66", "67", "68", "69",
+			"71", "73", "74", "75", "77", "79",
+			"81", "82", "83", "84", "85", "86", "87", "88", "89",
+			"91", "92", "93", "94", "95", "96", "97", "98", "99"
+		);
+		if (!in_array($ddd, $ddds_validos)) {
+			echo "<p>Número inválido</p>";
+		}
+
+
+		elseif (strlen($telefone) == 11 && substr($numero, 0, 1) == "9" && substr($numero, 1, 1) != "0") {
+			echo "<p>($ddd) " . substr($numero, 0, 5) . "-" . substr($numero, 5) . "</p>";
+		}
+		elseif (strlen($telefone) == 10 && substr($numero, 0, 1) >= 2 && substr($numero, 0, 1) <= 8) {
+			echo "<p>($ddd) " . substr($numero, 0, 4) . "-" . substr($numero, 4) . "</p>";
+		}
+		else {
+			echo "<p>Número inválido</p>";
+		}
+	}
+	else {
+		echo "<p>Número inválido</p>";
+	}
+}
+else {
+	echo "<p>Nenhum número de telefone informado</p>";
+}
+}
+?>
+
+</body>
 </html>
